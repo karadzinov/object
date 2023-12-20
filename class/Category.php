@@ -70,7 +70,7 @@ class Category extends DB implements Rules
     public function save()
     {
 
-        if($this->parent_id) {
+        if ($this->parent_id) {
             $data = [
                 "name" => $this->name,
                 "parent_id" => $this->parent_id
@@ -85,13 +85,12 @@ class Category extends DB implements Rules
         return $this->insertRow($data);
     }
 
-    public  function all()
+    public function all()
     {
         $categories = $this->selectAll();
         $results = [];
 
-        foreach($categories as $category)
-        {
+        foreach ($categories as $category) {
             $c = new self();
             $c->setId($category->id);
             $c->get();
@@ -109,7 +108,7 @@ class Category extends DB implements Rules
     public function update()
     {
 
-        if($this->parent_id) {
+        if ($this->parent_id) {
             $data = [
                 "name" => $this->name,
                 "parent_id" => $this->parent_id
@@ -123,5 +122,43 @@ class Category extends DB implements Rules
 
         return $this->updateRow($data, $this->id);
 
+    }
+
+    public function getTree($categories)
+    {
+        foreach ($categories as $category) {
+            if ($category->parent_id === null) {
+                echo '<ul>';
+                echo '<li>' . $category->getName() . '</li>';
+                $this->getList($category);
+                echo '</ul>';
+            }
+        }
+    }
+
+    public function getList($category)
+    {
+        $categories = $this->getCategories($category);
+
+        foreach ($categories as $category) {
+            echo '<ul>';
+            echo '<li>' . $category->getName() . '</li>';
+            $this->getList($category);
+            echo '</ul>';
+        }
+    }
+
+    public function getCategories($category)
+    {
+        $categories = [];
+        $result = $this->conn->query("SELECT * FROM categories WHERE parent_id = $category->id");
+        while ($category = $result->fetch_object()) {
+            $c = new self();
+            $c->setId($category->id);
+            $c->get();
+            $categories[] = $c;
+        }
+
+        return $categories;
     }
 }
