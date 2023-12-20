@@ -1,6 +1,9 @@
 <?php
 
-class User extends DB
+/**
+ *
+ */
+class User extends DB implements Rules
 {
     //  [private /  public / protected]
     private $id;
