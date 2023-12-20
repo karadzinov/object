@@ -20,7 +20,7 @@ class Category extends DB implements Rules
         $this->id = $id;
     }
 
-    public function getId($id)
+    public function getId()
     {
         return $this->id;
     }
@@ -129,7 +129,7 @@ class Category extends DB implements Rules
         foreach ($categories as $category) {
             if ($category->parent_id === null) {
                 echo '<ul>';
-                echo '<li>' . $category->getName() . '</li>';
+                echo '<li><a href="categories.php?id='. $category->getId(). '">' . $category->getName() . '</a></li>';
                 $this->getList($category);
                 echo '</ul>';
             }
@@ -142,7 +142,7 @@ class Category extends DB implements Rules
 
         foreach ($categories as $category) {
             echo '<ul>';
-            echo '<li>' . $category->getName() . '</li>';
+            echo '<li><a href="categories.php?id='. $category->getId(). '">' . $category->getName() . '</a></li>';
             $this->getList($category);
             echo '</ul>';
         }

@@ -73,5 +73,17 @@ class DB
         return $this->conn->query($query);
     }
 
+    public function selectWhere($condition, $value)
+    {
+        $query = "SELECT * FROM $this->table WHERE $condition=$value";
+        $db = $this->conn->query($query);
+        $results = [];
+        while ($row = $db->fetch_object()) {
+            $results[] = $row;
+        }
+
+        return $results;
+    }
+
 
 }
