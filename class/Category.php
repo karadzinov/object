@@ -1,8 +1,9 @@
 <?php
+namespace App;
 
 class Category extends DB implements Rules
 {
-
+    use Helper;
     private $id;
     private $name;
     private $created_at;

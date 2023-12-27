@@ -1,10 +1,12 @@
 <?php
+namespace App;
 
 /**
  *
  */
 class User extends DB implements Rules
 {
+    use Helper;
     //  [private /  public / protected]
     private $id;
     private $first_name;

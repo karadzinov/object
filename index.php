@@ -1,8 +1,8 @@
 <?php
-spl_autoload_register(function ($class) {
-    include 'class/' . $class . '.php';
-});
 
+require 'vendor/autoload.php';
+use App\Category;
+use App\Product;
 
 $category = new Category();
 
@@ -10,6 +10,19 @@ $category = new Category();
 $category->getTree($category->all());
 
 $category->getOptions($category->all());
+
+$product = new Product();
+$product->setId(3);
+$product->get();
+
+dd($product->getCreatedAt());
+
+dump("Prodolzuva");
+dd("here");
+
+
+
+
 /*
 
 echo '<select>

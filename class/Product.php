@@ -1,9 +1,11 @@
 <?php
-
-
+namespace App;
+use Carbon\Carbon;
 
 class Product extends DB implements Rules
 {
+
+    use Helper;
 
     private $id;
     private $name;
@@ -13,7 +15,11 @@ class Product extends DB implements Rules
     private $description;
     private $user_id;
 
+    private $category;
+
     private $quantity;
+
+    private $image;
 
     const table = "products";
 
@@ -102,7 +108,8 @@ class Product extends DB implements Rules
      */
     public function getCreatedAt()
     {
-        return $this->created_at;
+        $carbon = new Carbon($this->created_at);
+        return $carbon->format('Y-m-d h:i:s');
     }
 
     /**
@@ -124,6 +131,20 @@ class Product extends DB implements Rules
     /**
      * @param mixed $description
      */
+    public function setCategory($category): void
+    {
+        $this->category = $category;
+    }
+
+
+    public function getCategroy()
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param mixed $description
+     */
     public function setDescription($description): void
     {
         $this->description = $description;
@@ -137,6 +158,23 @@ class Product extends DB implements Rules
         return $this->quantity;
     }
 
+
+    /**
+     * @param mixed $image
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
     /**
      * @param mixed $quantity
      */
@@ -148,18 +186,20 @@ class Product extends DB implements Rules
     public function save()
     {
         $data = [
-          "name" => $this->name,
-          "price" => $this->price,
-          "description" => $this->description,
-          "quantity" => $this->quantity,
-          "type" => $this->type,
-          "user_id" => $this->user_id
+            "name" => $this->name,
+            "price" => $this->price,
+            "description" => $this->description,
+            "quantity" => $this->quantity,
+            "type" => $this->type,
+            "user_id" => $this->user_id,
+            "category_id" => $this->category,
+            "image" => $this->image
         ];
 
         return $this->insertRow($data);
     }
 
-    public  function delete()
+    public function delete()
     {
         return $this->deleteRow($this->id);
     }
@@ -172,7 +212,9 @@ class Product extends DB implements Rules
             "description" => $this->description,
             "quantity" => $this->quantity,
             "type" => $this->type,
-            "user_id" => $this->user_id
+            "user_id" => $this->user_id,
+            "category_id" => $this->category,
+            "image" => $this->image
         ];
 
         return $this->updateRow($data, $this->id);
@@ -183,8 +225,7 @@ class Product extends DB implements Rules
         $products = $this->selectAll();
         $results = [];
 
-        foreach($products as $product)
-        {
+        foreach ($products as $product) {
             $p = new self();
             $p->setId($product->id);
             $p->get();
@@ -205,6 +246,8 @@ class Product extends DB implements Rules
         $this->description = $product->description;
         $this->created_at = $product->created_at;
         $this->user_id = $product->user_id;
+        $this->category = $product->category_id;
+        $this->image = $product->image;
 
 
         return $this;

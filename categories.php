@@ -1,8 +1,9 @@
 <?php
 
-spl_autoload_register(function ($class) {
-    include 'class/' . $class . '.php';
-});
+include "vendor/autoload.php";
+use App\Category;
+use App\DB;
+use App\Product;
 
 
 $id = $_GET['id'];
